@@ -6,18 +6,33 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { mockTasks } from 'testUtils';
 
 import TaskList from '../TaskList';
+import { useDeleteTask, useGetTasks, useUpdateTask } from 'common/api/queryHooks';
 
 const mockApiResponse: ApiResponse<Task[]> = {
   data: mockTasks,
   success: true,
 };
 
-// Mock the specific queryHooks import path
-const mockUseGetTasks = jest.fn();
-
-jest.mock('common/api/queryHooks', () => ({
-  useGetTasks: () => mockUseGetTasks(),
+// Mock toast helper in TaskItem
+jest.mock('common/ui', () => ({
+  ...jest.requireActual('common/ui'),
+  toast: {
+    success: jest.fn(),
+    error: jest.fn(),
+  },
 }));
+
+// Mock the specific queryHooks import path
+jest.mock('common/api/queryHooks', () => ({
+  getTasksKey: 'getTasks',
+  useGetTasks: jest.fn(),
+  useUpdateTask: jest.fn(),
+  useDeleteTask: jest.fn(),
+}));
+
+const mockUseGetTasks = useGetTasks as jest.Mock;
+const mockUseUpdateTask = useUpdateTask as jest.Mock;
+const mockUseDeleteTask = useDeleteTask as jest.Mock;
 
 const setup = () => {
   const queryClient = new QueryClient({
@@ -42,6 +57,16 @@ describe('modules taskManagement TaskList', () => {
       data: undefined,
       isLoading: true,
       error: null,
+    });
+
+    mockUseDeleteTask.mockReturnValue({
+      mutate: jest.fn(),
+      isPending: false,
+    });
+
+    mockUseUpdateTask.mockReturnValue({
+      mutate: jest.fn(),
+      isPending: false,
     });
   });
 

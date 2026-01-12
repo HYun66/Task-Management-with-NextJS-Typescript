@@ -15,6 +15,7 @@ const customJestConfig = {
     '^types/(.*)$': '<rootDir>/types/$1',
     '^core/(.*)$': '<rootDir>/core/$1',
     '^modules/(.*)$': '<rootDir>/modules/$1',
+    '^testUtils$': '<rootDir>/src/testUtils',
   },
 };
 
