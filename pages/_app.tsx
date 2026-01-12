@@ -2,6 +2,7 @@
 import type { AppProps } from 'next/app';
 
 import { HeroUIProvider } from '@heroui/system';
+import { ToastProvider } from '@heroui/toast';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
 import { useRouter } from 'next/router';
 import 'styles/globals.css';
@@ -15,6 +16,7 @@ const App = ({ Component, pageProps }: AppProps) => {
     <HeroUIProvider navigate={router.push}>
       <NextThemesProvider attribute="class" defaultTheme="light">
         <QueryClientProvider client={queryClient}>
+          <ToastProvider />
           <Component {...pageProps} />
         </QueryClientProvider>
       </NextThemesProvider>
